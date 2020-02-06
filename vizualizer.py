@@ -26,10 +26,10 @@ class vizualize():
 		self.ax = plt.axes(xlim=(0, self.xSize), ylim=(0, self.ySize))
 		plt.axis('scaled')
 
-		self.path, = self.ax.plot([], [], lw=1, color = 'b', linestyle = '--')
+		self.path, = self.ax.plot([], [], lw=1, color = 'b', linestyle = '--',zorder=1)
 		self.feed, = self.ax.plot([], [], lw=2, color = 'k')
 
-		self.circle = Circle((0, 0), radius=5, color='r')
+		self.circle = Circle((0, 0), radius=5, color='r',zorder=3)
 		self.ax.add_patch(self.circle)
 
 		#self.ax.set_title('Grid Map')
@@ -42,6 +42,8 @@ class vizualize():
 		self.indexX+=1
 		self.indexY+=1
 
+	def spray(self, x, y):
+		self.ax.add_patch(Circle((x,y),radius=1, color='k', zorder=2))
 
 	def appendPlot(self, x, y, feedrate):
 		self.xs = np.append(self.xs, x)
@@ -56,7 +58,7 @@ class vizualize():
 		maskedY = np.ma.masked_where(self.mask==1, self.ys)
 
 		self.path.set_data(self.xs, self.ys)
-		self.feed.set_data(maskedX, maskedY)
+		#self.feed.set_data(maskedX, maskedY)
 
 		self.circle.center = (x, y)
 
@@ -66,18 +68,3 @@ class vizualize():
 	def animate(self, callback, steps, freq):
 		anim = animation.FuncAnimation(self.grid, func=callback, frames=steps, interval=freq, repeat=False)
 		plt.show()
-
-# x = 0
-# y = 0
-
-# obj = vizualize()
-
-# def cb(i):
-# 	if i>10 and i<50:
-# 		a = 1
-# 	else:
-# 		a = 0
-# 	obj.appendPlot(i,i,a)
-
-# if __name__ == '__main__':
-# 	obj.animate(cb, steps=100, freq=100)

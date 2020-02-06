@@ -136,11 +136,11 @@ class parse():
 				return lineDict
 				break
 
+
 	def process(self, dict):
 		
 		if 'G' in dict.keys():
-			if dict['G'] == '1':
-				print('yolo')
+			if dict['G'] == '1':				
 				if 'F' in dict.keys():
 					return float(dict['X']), float(dict['Y']), True
 				else:
@@ -148,7 +148,8 @@ class parse():
 
 			elif dict['G'] == '4':
 				if dict['P']:
-					time.sleep(float(dict['P'])/1000)
+					pass
+					#time.sleep(float(dict['P'])/1000)
 				else:
 					pass
 				return None
@@ -160,14 +161,6 @@ class parse():
 			if dict['M'] == '240':
 				return None
 
-	def test(self):
-		print(self.parseLine('G1X10Y10'))
-		print(self.parseLine('M240S4096'))
 
 	def main(self):
 		self.openFile("sample.gcode")
-
-
-if __name__ == '__main__':
-	test = parse()
-	test.test()

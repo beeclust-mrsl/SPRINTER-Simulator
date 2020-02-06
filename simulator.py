@@ -8,12 +8,13 @@ class simulate():
 	def __init__(self, timeStep):
 
 		self.gcode = gcodeParser.parse()
-		self.gcode.openFile('sample.gcode')
+		self.gcode.openFile('test3.gcode')
 		self.plot  = vizualizer.vizualize(xSize = 200, ySize = 200, xInit = 0, yInit =0)
-
+		self.x = None
+		self.y = None
 		self.timeStep = timeStep
 		self.steps = self.gcode.getLines()
-		self.gcode.openFile('sample.gcode')
+		self.gcode.openFile('test3.gcode')
 		print(self.steps)
 
 
@@ -22,16 +23,19 @@ class simulate():
 			line  = self.gcode.parseLine()
 
 			if self.gcode.process(line):
-				x, y, feed = self.gcode.process(line)
-				self.plot.appendPlot(x, y, feed)
+				self.x, self.y, feed = self.gcode.process(line)
+				self.plot.appendPlot(self.x, self.y, feed)
 
 			else:
-				self.gcode.process(line)				
+				if 'M' in line.keys():
+					self.plot.spray(self.x, self.y)
+				else:
+					self.gcode.process(line)				
 
 
 	def main(self):
 		self.plot.animate(callback = self.update, steps = self.steps, freq = self.timeStep)
 	
 if __name__ == '__main__':
-	simulator = simulate(1)
+	simulator = simulate(timeStep = 1)
 	simulator.main()
