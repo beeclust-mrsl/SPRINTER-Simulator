@@ -8,28 +8,28 @@ from matplotlib.patches import Circle
 
 class vizualize():
 
-	def __init__(self, x_size = 100, y_size = 100):
+	def __init__(self, xSize = 100, ySize = 100, xInit = 0, yInit = 0):
 		self.indexX = 0
 		self.indexY = 10
 
-		self.x_size = x_size
-		self.y_size = y_size
+		self.xSize = xSize
+		self.ySize = ySize
 
-		self.xs = np.array([])
-		self.ys = np.array([])
+		self.xs = np.array([xInit])
+		self.ys = np.array([yInit])
 
-		self.mask = np.array([])
+		self.mask = np.array([0])
 
 		self.grid = plt.figure()
 
 		self.ax = self.grid.add_subplot(111)
-		self.ax = plt.axes(xlim=(0, self.x_size), ylim=(0, self.y_size))
+		self.ax = plt.axes(xlim=(0, self.xSize), ylim=(0, self.ySize))
 		plt.axis('scaled')
 
 		self.path, = self.ax.plot([], [], lw=1, color = 'b', linestyle = '--')
 		self.feed, = self.ax.plot([], [], lw=2, color = 'k')
 
-		self.circle = Circle((0, 0), radius=2, color='r')
+		self.circle = Circle((0, 0), radius=5, color='r')
 		self.ax.add_patch(self.circle)
 
 		#self.ax.set_title('Grid Map')
@@ -67,19 +67,17 @@ class vizualize():
 		anim = animation.FuncAnimation(self.grid, func=callback, frames=steps, interval=freq, repeat=False)
 		plt.show()
 
-x = 0
-y = 0
+# x = 0
+# y = 0
 
+# obj = vizualize()
 
+# def cb(i):
+# 	if i>10 and i<50:
+# 		a = 1
+# 	else:
+# 		a = 0
+# 	obj.appendPlot(i,i,a)
 
-obj = vizualize()
-
-def cb(i):
-	if i>10 and i<50:
-		a = 1
-	else:
-		a = 0
-	obj.appendPlot(i,i,a)
-
-if __name__ == '__main__':
-	obj.animate(cb, steps=100, freq=100)
+# if __name__ == '__main__':
+# 	obj.animate(cb, steps=100, freq=100)

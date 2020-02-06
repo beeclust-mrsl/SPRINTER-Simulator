@@ -2,30 +2,36 @@
 
 import gcodeParser
 import vizualizer
-import time
 
 class simulate():
 
 	def __init__(self, timeStep):
 
-		self.gcode = gcodeParser.parse('sample.gcode')
-		self.plot  = vizualizer.vizualize(x_size = 100, y_size = 100)
+		self.gcode = gcodeParser.parse()
+		self.gcode.openFile('sample.gcode')
+		self.plot  = vizualizer.vizualize(xSize = 200, ySize = 200, xInit = 0, yInit =0)
 
 		self.timeStep = timeStep
+		self.steps = self.gcode.getLines()
+		self.gcode.openFile('sample.gcode')
+		print(self.steps)
 
 
 	def update(self, i):
  
-			code  = self.gcode.parseLine()
+			line  = self.gcode.parseLine()
 
-			if code == lorem:
-				x, y, feedrate = self.gcode.process(code)
-				self.plot.appendPlot(x, y, feedrate)
+			if self.gcode.process(line):
+				x, y, feed = self.gcode.process(line)
+				self.plot.appendPlot(x, y, feed)
+
+			else:
+				self.gcode.process(line)				
 
 
 	def main(self):
-		self.plot.animate(self.update, lines, self.timeStep)
+		self.plot.animate(callback = self.update, steps = self.steps, freq = self.timeStep)
 	
 if __name__ == '__main__':
-	simulator = simulate()
+	simulator = simulate(1)
 	simulator.main()

@@ -1,1 +1,1 @@
-# SPRINTER-GCODE-Slicer
+# SPRINTER-GCODE-Simulator

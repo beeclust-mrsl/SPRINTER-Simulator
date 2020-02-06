@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import re
+import time
 
 def _clean_codestr(value):
 	if value < 10:
@@ -82,19 +83,34 @@ class parse():
 		
 		}
 
+	def getLines(self):
+		num = 0
+		for lines in self.file:
+			num += 1
 
-	def readFile(self, path):
+		return num
+
+
+	def openFile(self, path):
 		self.file = open(path, "rt")
 
-		#for x in self.file:
-		line = self.file.readline()
-		line = line.rstrip('\n')
-		print(line[0])
 
-	def parseLine(self, line):
+	def readLine(self):
+		gcLine = self.file.readline()
+		gcLine = gcLine.rstrip('\n')
+		gcLine = gcLine.replace(" ", "")
+
+		#print(gcLine)
+		return gcLine
+
+
+	def parseLine(self):
+		line = self.readLine()
 
 		nextWord = re.compile(r'^.*?(?P<letter>[%s])' % ''.join(self.codeDict.keys()), re.IGNORECASE)
 		index = 0
+
+		lineDict = {}
 
 		while True:
 
@@ -114,23 +130,44 @@ class parse():
 				value = valueMatch.group() # matched text
 				index += valueMatch.end() # propogate index to end of value
 
-				print(letter,value)
+				lineDict[letter] = value
 
 			else:
+				return lineDict
 				break
 
-	def process(self, letter, value):
-		print('def')
+	def process(self, dict):
 		
+		if 'G' in dict.keys():
+			if dict['G'] == '1':
+				print('yolo')
+				if 'F' in dict.keys():
+					return float(dict['X']), float(dict['Y']), True
+				else:
+					return float(dict['X']), float(dict['Y']), False
+
+			elif dict['G'] == '4':
+				if dict['P']:
+					time.sleep(float(dict['P'])/1000)
+				else:
+					pass
+				return None
+
+			elif dict['G'] == '92':
+				return None
+
+		elif 'M' in dict.keys():
+			if dict['M'] == '240':
+				return None
 
 	def test(self):
-		self.parseLine('G1X10Y10')
-
+		print(self.parseLine('G1X10Y10'))
+		print(self.parseLine('M240S4096'))
 
 	def main(self):
 		self.openFile("sample.gcode")
 
 
 if __name__ == '__main__':
-	test = gcodeParser()
+	test = parse()
 	test.test()
